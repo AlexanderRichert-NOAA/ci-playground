@@ -8,7 +8,7 @@ jobs:
   test123:
     runs-on: ubuntu-latest
     env:
-      mysecret: ${{ secrets.MYSECONDTESTSECRET }}
+      mysecret: ${{ secrets.SPACKBUILDCACHE }}
     steps:
       - name: "run shell"
         shell: bash
