@@ -6,6 +6,7 @@ on:
 
 jobs:
   test123:
+    runs-on: ubuntu-latest
     steps:
       - name: "run shell"
         shell: bash
