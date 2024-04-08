@@ -1,0 +1,18 @@
+name: test123
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test123:
+    steps:
+      - name: "run shell"
+        shell: bash
+        run: |
+          echo A > file1
+          echo B > file2
+          echo C > file3
+          tar -f myarchive.tar file1 file2 file3
+          skopeo login --username ${{ github.repository_owner }} --password ${{ secrets.mytestsecret }}
+          skopeo copy --all oci-archive:myarchive.tar docker://ghcr.io/${{ github.repository }}
