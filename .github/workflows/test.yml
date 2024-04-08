@@ -7,11 +7,11 @@ on:
 jobs:
   test123:
     runs-on: ubuntu-latest
-    env:
-      mysecret: abc${{ secrets.SPACKBUILDCACHE }}
     steps:
       - name: "run shell"
         shell: bash
+        env:
+          mysecret: ${{ secrets.SPACKBUILDCACHE }}
         run: |
           echo A > file1
           echo B > file2
