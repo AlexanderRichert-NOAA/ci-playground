@@ -18,4 +18,4 @@ jobs:
           echo C > file3
           tar -cf myarchive.tar file1 file2 file3
           skopeo login --username ${{ github.repository_owner }} --password $mysecret ghcr.io
-          skopeo copy --all oci-archive:myarchive.tar docker://ghcr.io/${{ github.repository }}
+          skopeo copy --all oci-archive:myarchive.tar docker://ghcr.io/$(echo ${{ github.repository }} | tr [A-Z] [a-z])
