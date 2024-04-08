@@ -15,5 +15,5 @@ jobs:
           echo B > file2
           echo C > file3
           tar -cf myarchive.tar file1 file2 file3
-          skopeo login --username ${{ github.repository_owner }} --password ${{ secrets.mytestsecret }}
+          skopeo login --username ${{ github.repository_owner }} --password ${{ secrets.MYTESTSECRET }}
           skopeo copy --all oci-archive:myarchive.tar docker://ghcr.io/${{ github.repository }}
