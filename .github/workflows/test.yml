@@ -11,7 +11,7 @@ jobs:
       - name: "run shell"
         shell: bash
         env:
-          mysecret: ${{ secrets.SPACKBUILDCACHE }}
+          mysecret: ${{ secrets.MYTESTSECRET }}
         run: |
           echo A > file1
           echo B > file2
