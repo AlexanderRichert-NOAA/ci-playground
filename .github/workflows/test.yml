@@ -8,14 +8,19 @@ jobs:
   test123:
     runs-on: ubuntu-latest
     steps:
-      - name: "run shell"
-        shell: bash
-        env:
-          mysecret: ${{ secrets.MYTESTSECRET }}
-        run: |
-          echo A > file1
-          echo B > file2
-          echo C > file3
-          tar -cf myarchive.tar file1 file2 file3
-          skopeo login --username ${{ github.repository_owner }} --password $mysecret ghcr.io
-          skopeo copy --all oci-archive:myarchive.tar docker://ghcr.io/$(echo ${{ github.repository }} | tr [A-Z] [a-z])
+#      - name: "run shell"
+#        shell: bash
+#        env:
+#          mysecret: ${{ secrets.MYTESTSECRET }}
+#        run: |
+#          echo A > file1
+#          echo B > file2
+#          echo C > file3
+#          tar -cf myarchive.tar file1 file2 file3
+#          skopeo login --username ${{ github.repository_owner }} --password $mysecret ghcr.io
+#          skopeo copy --all oci-archive:myarchive.tar docker://ghcr.io/$(echo ${{ github.repository }} | tr [A-Z] [a-z])
+      - name: "build jasper"
+        uses: AlexanderRichert-NOAA/build-nceplibs@develop
+        with:
+          jasper-version: version-2.0.25
+          repo-cache: true
