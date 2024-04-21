@@ -19,8 +19,10 @@ jobs:
 #          tar -cf myarchive.tar file1 file2 file3
 #          skopeo login --username ${{ github.repository_owner }} --password $mysecret ghcr.io
 #          skopeo copy --all oci-archive:myarchive.tar docker://ghcr.io/$(echo ${{ github.repository }} | tr [A-Z] [a-z])
-      - name: "build bacio and not jasper"
+      - name: "build w3emc"
         uses: AlexanderRichert-NOAA/build-nceplibs@develop
         with:
           bacio-version: v2.6.0
+          w3emc-version: v2.10.0
+          bufr-version: v12.0.0
           repo-cache: true
