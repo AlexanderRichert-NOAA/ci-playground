@@ -24,5 +24,5 @@ jobs:
         with:
           bacio-version: v2.6.0
           w3emc-version: v2.10.0
-          bufr-version: v12.0.0
+          bufr-version: v12.0.1
           repo-cache: true
