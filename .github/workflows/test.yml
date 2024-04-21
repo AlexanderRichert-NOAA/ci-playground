@@ -19,11 +19,14 @@ jobs:
 #          tar -cf myarchive.tar file1 file2 file3
 #          skopeo login --username ${{ github.repository_owner }} --password $mysecret ghcr.io
 #          skopeo copy --all oci-archive:myarchive.tar docker://ghcr.io/$(echo ${{ github.repository }} | tr [A-Z] [a-z])
-      - name: "build g2"
+      - name: "build various"
         uses: AlexanderRichert-NOAA/build-nceplibs@develop
         with:
           bacio-version: v2.6.0
           w3emc-version: v2.10.0
           jasper-version: version-2.0.25
           g2-version: v3.4.5
+          g2c-version: v1.8.0
+          ip-version: v4.4.0
+          sp-version: v2.5.0
           repo-cache: true
