@@ -29,4 +29,5 @@ jobs:
           g2c-version: v1.8.0
           ip-version: v4.4.0
           sp-version: v2.5.0
+          bufr-version: v12.0.1
           repo-cache: true
