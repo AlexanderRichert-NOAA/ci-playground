@@ -33,10 +33,6 @@ jobs:
 #          repo-cache: true
       - name: 'install intel'
         uses: AlexanderRichert-NOAA/install-intel@develop
-        with:
-          install-mpi: true
-          install-openmp: true
-          install-mkl: true
       - name: 'test'
         run: |
           which icc
