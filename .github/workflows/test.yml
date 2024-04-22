@@ -33,3 +33,7 @@ jobs:
 #          repo-cache: true
       - name: 'install intel'
         uses: AlexanderRichert-NOAA/install-intel@develop
+      - name: 'test'
+        run: |
+          which icc
+          ifx --version
