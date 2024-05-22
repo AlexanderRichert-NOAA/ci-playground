@@ -35,5 +35,9 @@ jobs:
         uses: AlexanderRichert-NOAA/install-intel@develop
       - name: 'test'
         run: |
-          which icc
-          ifx --version
+          echo 1
+          which git
+          echo 2
+          git --version
+          echo 3
+          ls /usr/bin | grep git
