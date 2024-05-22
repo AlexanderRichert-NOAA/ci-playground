@@ -31,8 +31,8 @@ jobs:
 #          sp-version: v2.5.0
 #          bufr-version: v12.0.1
 #          repo-cache: true
-      - name: 'install intel'
-        uses: AlexanderRichert-NOAA/install-intel@develop
+#      - name: 'install intel'
+#        uses: AlexanderRichert-NOAA/install-intel@develop
       - name: 'test'
         run: |
           echo 1
