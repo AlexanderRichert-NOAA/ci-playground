@@ -17,11 +17,11 @@ jobs:
           }
         - {
             name: "oneapi",
-            version: 2023.2.1
+            version: "2023.2.1"
           }
         - {
             name: "oneapi",
-            version: 2025.0
+            version: "2025.0"
           }
         os: [ubuntu-22.04, ubuntu-24.04]
     runs-on: ${{ matrix.os }}
@@ -52,7 +52,7 @@ jobs:
           if [ $COMPILERLIST == '%gcc' ]; then
             if [ ${{ matrix.os }} == 'ubuntu-22.04' ]; then gccvers='10 11 12'; fi
             if [ ${{ matrix.os }} == 'ubuntu-24.04' ]; then gccvers='12 13 14'; fi
-            apt install $(for ver in $gccvers; do echo gcc-$ver g++-$ver gfortran-$ver ; done)
+            sudo apt install $(for ver in $gccvers; do echo gcc-$ver g++-$ver gfortran-$ver ; done)
             COMPILERLIST=$(for ver in $gccvers; do echo "'%gcc-$ver'",; done | perl -pe 's|\n||;s|,$||')
           fi
           sed "s|@COMPILERLIST@|$COMPILERLIST|" spack.yaml.in > spack.yaml
