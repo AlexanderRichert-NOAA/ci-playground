@@ -10,12 +10,11 @@ jobs:
     steps:
       - name: "run shell"
         shell: bash
-        env:
-          mysecret: ${{ secrets.MYTESTSECRET }}
         run: |
-          echo A > file1
-          echo B > file2
-          echo C > file3
-          tar -cf myarchive.tar file1 file2 file3
-          skopeo login --username ${{ github.repository_owner }} --password $mysecret ghcr.io
-          skopeo copy --all oci-archive:myarchive.tar docker://ghcr.io/$(echo ${{ github.repository }} | tr [A-Z] [a-z])
+          git clone --depth 1 https://github.com/spack/spack
+          cd spack
+          . share/spack/setup-env.sh
+          spack mirror add spack-build-cache oci://ghcr.io/${{ github.repository_owner }}/spack-build-cache
+          spack mirror set --oci-username ${{ github.repository_owner }} --oci-password "${{ secrets.GITHUB_TOKEN }}" spack-build-cache
+          spack install gmake
+          spack buildcache push spack-build-cache gmake
