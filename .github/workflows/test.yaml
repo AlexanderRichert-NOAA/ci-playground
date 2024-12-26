@@ -37,8 +37,8 @@ jobs:
         uses: NOAA-EMC/ci-install-intel-toolkit@develop
         if: ${{ matrix.compiler.name == 'intel' || matrix.compiler.name == 'oneapi' }}
         with:
-          install-classic: ${{ matrix.compiler.name == "intel" }}
-          install-oneapi: ${{ matrix.compiler.name == "oneapi" }}
+          install-classic: ${{ matrix.compiler.name == 'intel' }}
+          install-oneapi: ${{ matrix.compiler.name == 'oneapi' }}
           oneapi-version: ${{ matrix.compiler.version }}
           install-mpi: true
       - name: "run shell"
