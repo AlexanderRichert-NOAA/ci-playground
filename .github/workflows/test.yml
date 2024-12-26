@@ -22,4 +22,4 @@ jobs:
           spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
           spack install gmake
-          spack buildcache push --base-image ubuntu:22.04 --update-index spack-build-cache
+          spack buildcache push --base-image ubuntu:22.04 --update-index spack-build-cache gmake
