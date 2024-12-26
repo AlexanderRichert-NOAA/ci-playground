@@ -18,6 +18,7 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/spack/spack
           cd spack
+          git checkout 4f0e336ed09408809df1b570422a64b3e02e9eb2
           . share/spack/setup-env.sh
           spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
