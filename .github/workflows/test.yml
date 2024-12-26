@@ -6,7 +6,7 @@ on:
 
 jobs:
   test123:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       packages: write
     steps:
@@ -20,6 +20,6 @@ jobs:
           cd spack
           . share/spack/setup-env.sh
           spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME
-          spack mirror set --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
+          spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
           spack install gmake
-          spack buildcache push spack-build-cache gmake
+          spack buildcache push --base-image ubuntu:22.04 --update-index spack-build-cache
