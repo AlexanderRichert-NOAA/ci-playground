@@ -41,8 +41,8 @@ jobs:
           install-oneapi: ${{ matrix.compiler.name == 'oneapi' }}
           oneapi-version: ${{ matrix.compiler.version }}
           install-mpi: true
-      - name: "run shell"
-        shell: bash
+      - name: "Build and cache packages"
+        shell: spack-bash {0}
         env:
           OCI_USERNAME: ${{ github.repository_owner }}
           OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
