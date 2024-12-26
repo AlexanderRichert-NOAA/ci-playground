@@ -10,17 +10,17 @@ jobs:
       matrix:
         compiler:
         - {
-            name: gcc
+            name: "gcc"
           }
         - {
-            name: intel
+            name: "intel",
           }
         - {
-            name: oneapi
+            name: "oneapi",
             version: 2023.2.1
           }
         - {
-            name: oneapi
+            name: "oneapi",
             version: 2025.0
           }
         os: [ubuntu-22.04, ubuntu-24.04]
