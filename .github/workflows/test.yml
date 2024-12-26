@@ -13,11 +13,13 @@ jobs:
         env:
           OCI_USERNAME: AlexanderRichert-NOAA
           OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        permissions:
+          packages: write
         run: |
           git clone --depth 1 https://github.com/spack/spack
           cd spack
           . share/spack/setup-env.sh
-          spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
+          spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAMEspack mirror set --oci-username-variable/ci-playground
           spack mirror set --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
           spack install gmake
           spack buildcache push spack-build-cache gmake
