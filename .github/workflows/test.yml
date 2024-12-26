@@ -16,7 +16,7 @@ jobs:
           OCI_USERNAME: AlexanderRichert-NOAA
           OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git clone --depth 1 https://github.com/spack/spack
+          git clone https://github.com/spack/spack
           cd spack
           git checkout 4f0e336ed09408809df1b570422a64b3e02e9eb2
           . share/spack/setup-env.sh
