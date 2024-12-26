@@ -35,7 +35,7 @@ jobs:
           path: ${{ inputs.spack-root }}
       - name: "Get Intel"
         uses: NOAA-EMC/ci-install-intel-toolkit@develop
-        when: ${{ matrix.compiler.name == "intel" || matrix.compiler.name == "oneapi" }}
+        if: ${{ matrix.compiler.name == 'intel' || matrix.compiler.name == 'oneapi' }}
         with:
           install-classic: ${{ matrix.compiler.name == "intel" }}
           install-oneapi: ${{ matrix.compiler.name == "oneapi" }}
