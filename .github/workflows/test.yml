@@ -10,11 +10,14 @@ jobs:
     steps:
       - name: "run shell"
         shell: bash
+        env:
+          OCI_USERNAME: ${{ github.repository_owner }}
+          OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git clone --depth 1 https://github.com/spack/spack
           cd spack
           . share/spack/setup-env.sh
           spack mirror add spack-build-cache oci://ghcr.io/${{ github.repository_owner }}/spack-build-cache
-          spack mirror set --oci-username ${{ github.repository_owner }} --oci-password "${{ github.token }}" spack-build-cache
+          spack mirror set --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
           spack install gmake
           spack buildcache push spack-build-cache gmake
