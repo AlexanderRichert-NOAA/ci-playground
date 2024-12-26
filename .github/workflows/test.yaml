@@ -56,6 +56,7 @@ jobs:
             COMPILERLIST=$(for ver in $gccvers; do echo "'%gcc-$ver'",; done | perl -pe 's|\n||;s|,$||')
           fi
           sed "s|@COMPILERLIST@|$COMPILERLIST|" spack.yaml.in > spack.yaml
+          cat spack.yaml
           spack compiler find
           spack -e . concretize |& tee log.concretize
           spack -e . install --fail-fast --show-log-on-error
