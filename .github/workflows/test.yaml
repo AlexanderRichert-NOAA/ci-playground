@@ -30,9 +30,6 @@ jobs:
     steps:
       - name: "Get Spack"
         uses: spack/setup-spack@v2.1.1
-        with:
-          ref: ${{ inputs.spack-ref }}
-          path: ${{ inputs.spack-root }}
       - name: "Get Intel"
         uses: NOAA-EMC/ci-install-intel-toolkit@develop
         if: ${{ matrix.compiler.name == 'intel' || matrix.compiler.name == 'oneapi' }}
