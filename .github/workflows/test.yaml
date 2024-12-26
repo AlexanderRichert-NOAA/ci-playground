@@ -1,0 +1,63 @@
+name: spack-build-cache
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  spack-build-cache:
+    strategy:
+      matrix:
+        compiler:
+        - {
+            name: gcc
+          }
+        - {
+            name: intel
+          }
+        - {
+            name: oneapi
+            version: 2023.2.1
+          }
+        - {
+            name: oneapi
+            version: 2025.0
+          }
+        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      packages: write
+    steps:
+      - name: "Get Spack"
+        uses: spack/setup-spack@v2.1.1
+        with:
+          ref: ${{ inputs.spack-ref }}
+          path: ${{ inputs.spack-root }}
+      - name: "Get Intel"
+        uses: NOAA-EMC/ci-install-intel-toolkit@develop
+        when: ${{ matrix.compiler.name == "intel" || matrix.compiler.name == "oneapi" }}
+        with:
+          install-classic: ${{ matrix.compiler.name == "intel" }}
+          install-oneapi: ${{ matrix.compiler.name == "oneapi" }}
+          oneapi-version: ${{ matrix.compiler.version }}
+          install-mpi: true
+      - name: "run shell"
+        shell: bash
+        env:
+          OCI_USERNAME: ${{ github.repository_owner }}
+          OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
+          spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
+          COMPILERLIST="'%${{ matrix.compiler.name }}'"
+          if [ $COMPILERLIST == '%gcc' ]; then
+            if [ ${{ matrix.os }} == 'ubuntu-22.04' ]; then gccvers='10 11 12'; fi
+            if [ ${{ matrix.os }} == 'ubuntu-24.04' ]; then gccvers='12 13 14'; fi
+            apt install $(for ver in $gccvers; do echo gcc-$ver g++-$ver gfortran-$ver ; done)
+            COMPILERLIST=$(for ver in $gccvers; do echo "'%gcc-$ver'",; done | perl -pe 's|\n||;s|,$||')
+          fi
+          sed "s|@COMPILERLIST@|$COMPILERLIST|" spack.yaml.in > spack.yaml
+          spack compiler find
+          spack -e . concretize |& tee log.concretize
+          spack -e . install --fail-fast --show-log-on-error
+          spack buildcache push --update-index spack-build-cache
