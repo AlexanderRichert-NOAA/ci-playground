@@ -7,14 +7,14 @@ on:
 jobs:
   test123:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - name: "run shell"
         shell: bash
         env:
           OCI_USERNAME: AlexanderRichert-NOAA
           OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        permissions:
-          packages: write
         run: |
           git clone --depth 1 https://github.com/spack/spack
           cd spack
