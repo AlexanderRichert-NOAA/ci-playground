@@ -21,12 +21,12 @@ jobs:
           }
         - {
             name: "gcc",
-            version: "12"
+            version: "12",
             os: "ubuntu-22.04",
           }
         - {
             name: "gcc",
-            version: "12"
+            version: "12",
             os: "ubuntu-24.04",
           }
         - {
