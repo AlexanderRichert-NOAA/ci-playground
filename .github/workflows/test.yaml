@@ -51,24 +51,28 @@ jobs:
             version: "2023.2.1",
             os: "ubuntu-22.04",
             mpi: "intel-oneapi-mpi",
+            mpi-version: "2021.10.0",
           }
         - {
             name: "intel",
             version: "2023.2.1",
             os: "ubuntu-24.04",
             mpi: "intel-oneapi-mpi",
+            mpi-version: "2021.10.0",
           }
         - {
             name: "oneapi",
             version: "2025.0",
             os: "ubuntu-22.04",
             mpi: "intel-oneapi-mpi",
+            mpi-version: "2021.14",
           }
         - {
             name: "oneapi",
             version: "2025.0",
             os: "ubuntu-24.04",
             mpi: "intel-oneapi-mpi",
+            mpi-version: "2021.14",
           }
     runs-on: ${{ matrix.config.os }}
     permissions:
@@ -87,6 +91,7 @@ jobs:
           install-oneapi: ${{ matrix.config.name == 'oneapi' }}
           oneapi-version: ${{ matrix.config.version }}
           install-mpi: true
+          mpi-version: ${{ matrix.config.mpi-version }}
           compiler-setup: ${{ matrix.config.name }}
       - name: "Build and cache packages"
         shell: spack-bash {0}
@@ -119,7 +124,7 @@ jobs:
           spack config add "packages:mpi:require:'${{ matrix.config.mpi }}'"
           spack config add "packages:mpi:buildable:false"
           if [ ${{ matrix.config.mpi }} == intel-oneapi-mpi ]; then
-            sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${CI_INTEL_MPI_VERSION}\n        prefix: /opt/intel/oneapi|" spack.yaml
+            sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${{ matrix.mpi-version }}\n        prefix: /opt/intel/oneapi|" spack.yaml
           else
             sudo apt install ${{ matrix.config.mpi }}
           fi
