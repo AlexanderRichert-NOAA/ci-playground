@@ -94,7 +94,8 @@ jobs:
             intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux/bin/intel64/ | grep -oP "intel@\K[\d\.]+")
             COMPILER=intel@$intelversion
           fi
-          spack config add "packages:all:prefer:['%$COMPILER']"
+          spack -e . config add "packages:all:prefer:['%$COMPILER']"
+          spack -e . external find python perl cmake gmake
           cat spack.yaml
           spack -e . concretize --fresh |& tee log.concretize
           spack -e . install --no-check-signature --fail-fast --show-log-on-error
