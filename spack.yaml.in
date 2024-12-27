@@ -3,11 +3,9 @@ spack:
   - packages:
     - bacio
     - w3emc
-  - compiler: ['%@COMPILER@']
   specs:
   - matrix:
     - [$packages]
-    - [$compiler]
   view: false
   concretizer:
     unify: when_possible
