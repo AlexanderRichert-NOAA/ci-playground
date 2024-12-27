@@ -1,13 +1,13 @@
 spack:
   definitions:
-    packages:
-      - bacio
-      - w3emc
-    compilers: [@COMPILERLIST@]
+  - packages:
+    - bacio
+    - w3emc
+  - compilers: [@COMPILERLIST@]
   specs:
-    - matrix:
-      - [$packages]
-      - [$compilers]
+  - matrix:
+    - [$packages]
+    - [$compilers]
   view: true
   concretizer:
     unify: when_possible
