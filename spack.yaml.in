@@ -1,7 +1,13 @@
 spack:
+  definitions:
+  - packages:
+    - bacio
+    - w3emc
+  - compiler: ['%@COMPILER@']
   specs:
-  - bacio
-  - w3emc
+  - matrix:
+    - [$packages]
+    - [$compiler]
   view: false
   concretizer:
     unify: when_possible
