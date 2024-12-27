@@ -98,7 +98,7 @@ jobs:
           fi
           spack config add "packages:all:prefer:['%$COMPILER']"
           sudo mv /usr/local /usr/local_mv
-          spack external find --all --exclude gcc --exclude intel --exclude oneapi --exclude clang --exclude llvm --exclude curl
+          spack external find --all --exclude intel --exclude oneapi --exclude clang --exclude llvm --exclude llvm-doe --exclude curl
           cat spack.yaml
           spack concretize --fresh |& tee log.concretize
           spack install --no-check-signature --fail-fast --show-log-on-error
