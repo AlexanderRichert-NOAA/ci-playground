@@ -91,7 +91,7 @@ jobs:
           elif [ ${{ matrix.config.name }} == 'oneapi' ]; then
             spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux
           elif [ ${{ matrix.config.name }} == 'intel' ]; then
-            intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux/bin/intel64/) | grep -oP "intel@\K[\d\.]+")
+            intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux/bin/intel64/ | grep -oP "intel@\K[\d\.]+")
             COMPILER=intel@$intelversion
           fi
           spack config add "packages:all:prefer:['%$COMPILER']"
