@@ -94,9 +94,11 @@ jobs:
           OCI_USERNAME: ${{ github.repository_owner }}
           OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Set up mirror for build caching:
           spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
           COMPILER="${{ matrix.config.name }}@${{ matrix.config.version }}"
+          # Activate environment and set up compilers:
           spack env activate .
           if [ ${{ matrix.config.name }} == 'gcc' ]; then
             sudo apt install gcc-${{ matrix.config.version }} g++-${{ matrix.config.version }} gfortran-${{ matrix.config.version }}
@@ -111,18 +113,22 @@ jobs:
           if [ ${{ matrix.config.os  }} == 'ubuntu-24.04' ]; then
             spack config add "packages:cmake:require:'%gcc@13'"
           fi
+          # MPI setup. Always use external to avoid a mess of dependencies.
+          # This means that users of any cached MPI-based packages must have
+          # the appropriate MPI library installed in their own workflow via apt.
           spack config add "packages:mpi:require:'${{ matrix.config.mpi }}'"
+          spack config add "packages:mpi:buildable:false"
           if [ ${{ matrix.config.mpi }} == intel-oneapi-mpi ]; then
-            spack config add "packages:mpi:buildable:false"
             # Apply patch for detecting Intel MPI (https://github.com/spack/spack/pull/45474)
             cp packages/intel-oneapi-mpi/package.py $(spack location --package-dir intel-oneapi-mpi)/.
-            spack external find intel-oneapi-mpi
           else
             sudo apt install ${{ matrix.config.mpi }}
           fi
+          # Find externals, including MPI:
           sudo mv /usr/local /usr/local_mv
           spack external find --all --exclude intel --exclude oneapi --exclude clang --exclude llvm --exclude llvm-doe --exclude curl
           cat spack.yaml
+          # Build-n-cache:
           spack concretize --fresh |& tee log.concretize
           spack install --no-check-signature --fail-fast --show-log-on-error
           spack buildcache push --update-index spack-build-cache
