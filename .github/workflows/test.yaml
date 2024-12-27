@@ -98,7 +98,7 @@ jobs:
           fi
           spack config add "packages:all:prefer:['%$COMPILER']"
           sudo mv /usr/local /usr/local_mv
-          spack external find python perl cmake gmake
+          spack external find --all
           cat spack.yaml
           spack concretize --fresh |& tee log.concretize
           spack install --no-check-signature --fail-fast --show-log-on-error
