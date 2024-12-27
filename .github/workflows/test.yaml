@@ -99,8 +99,10 @@ jobs:
           sed "s|@COMPILER@|$COMPILER|" spack.yaml.in > spack.yaml
           if [ ${{ matrix.config.name }} == 'gcc' ]; then
             sudo apt install gcc-${{ matrix.config.version }} g++-${{ matrix.config.version }} gfortran-${{ matrix.config.version }}
-          elif [[ " intel oneapi " =~ " ${{ matrix.config.name }} " ]]; then
+          if [ ${{ matrix.config.name }} == 'oneapi' ]; then
             spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux
+          if [ ${{ matrix.config.name }} == 'intel' ]; then
+            spack compiler find $(find /opt/intel/oneapi/compiler/*/linux/bin/intel64/)
           fi
           cat spack.yaml
           spack -e . concretize --fresh |& tee log.concretize
