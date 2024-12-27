@@ -1,8 +1,7 @@
 spack:
   specs:
-  - matrix:
-    - bacio
-    - w3emc
+  - bacio
+  - w3emc
   view: false
   concretizer:
     unify: when_possible
