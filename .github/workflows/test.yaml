@@ -99,9 +99,9 @@ jobs:
           fi
           spack config add "packages:all:prefer:['%$COMPILER']"
           if [ ${{ matrix.config.os  }} == 'ubuntu-22.04' ]; then
-            spack config add "packages:gcc-runtime:require:'%gcc@11'"
+            spack config add "packages:cmake:require:'@3.28'"
           elif [ ${{ matrix.config.os  }} == 'ubuntu-24.04' ]; then
-            spack config add "packages:gcc-runtime:require:'%gcc@13'"
+            spack config add "packages:cmake:require:'@3.28'"
           fi
           sudo mv /usr/local /usr/local_mv
           spack external find --all --exclude intel --exclude oneapi --exclude clang --exclude llvm --exclude llvm-doe --exclude curl
