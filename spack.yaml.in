@@ -8,6 +8,10 @@ spack:
   - matrix:
     - [$packages]
     - [$compilers]
-  view: true
+  view: false
   concretizer:
     unify: when_possible
+  packages:
+    all:
+      require:
+        - one_of: ['%gcc', '%intel', '%oneapi']
