@@ -60,4 +60,4 @@ jobs:
           spack compiler find
           spack -e . concretize |& tee log.concretize
           spack -e . install --no-check-signature --fail-fast --show-log-on-error
-          spack buildcache push --update-index spack-build-cache
+          spack -e . buildcache push --update-index spack-build-cache
