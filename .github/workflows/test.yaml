@@ -14,51 +14,61 @@ jobs:
             name: "gcc",
             version: "10",
             os: "ubuntu-22.04",
+            mpi: "mpich",
           }
         - {
             name: "gcc",
             version: "11",
             os: "ubuntu-22.04",
+            mpi: "mpich",
           }
         - {
             name: "gcc",
             version: "12",
             os: "ubuntu-22.04",
+            mpi: "mpich",
           }
         - {
             name: "gcc",
             version: "12",
             os: "ubuntu-24.04",
+            mpi: "mpich",
           }
         - {
             name: "gcc",
             version: "13",
             os: "ubuntu-24.04",
+            mpi: "mpich",
           }
         - {
             name: "gcc",
             version: "14",
             os: "ubuntu-24.04",
+            mpi: "mpich",
           }
         - {
             name: "intel",
             version: "2023.2.1",
             os: "ubuntu-22.04",
+            mpi: "intel-oneapi-mpi",
           }
         - {
             name: "intel",
             version: "2023.2.1",
             os: "ubuntu-24.04",
+            mpi: "intel-oneapi-mpi",
           }
         - {
             name: "oneapi",
             version: "2025.0",
             os: "ubuntu-22.04",
+            mpi: "intel-oneapi-mpi",
           }
         - {
             name: "oneapi",
             version: "2025.0",
             os: "ubuntu-24.04",
+            mpi: "intel-oneapi-mpi",
           }
     runs-on: ${{ matrix.config.os }}
     permissions:
@@ -100,6 +110,15 @@ jobs:
           spack config add "packages:all:prefer:['%$COMPILER']"
           if [ ${{ matrix.config.os  }} == 'ubuntu-24.04' ]; then
             spack config add "packages:cmake:require:'%gcc@13'"
+          fi
+          spack config add "packages:mpi:require:'${{ matrix.config.mpi }}'"
+          if [ ${{ matrix.config.mpi }} == intel-oneapi-mpi ]; then
+            spack config add "packages:mpi:buildable:false"
+            # Apply patch for detecting Intel MPI (https://github.com/spack/spack/pull/45474)
+            cp packages/intel-oneapi-mpi/package.py $(spack location --package-dir intel-oneapi-mpi)/.
+            spack external find intel-oneapi-mpi
+          else
+            sudo apt install ${{ matrix.config.mpi }}
           fi
           sudo mv /usr/local /usr/local_mv
           spack external find --all --exclude intel --exclude oneapi --exclude clang --exclude llvm --exclude llvm-doe --exclude curl
