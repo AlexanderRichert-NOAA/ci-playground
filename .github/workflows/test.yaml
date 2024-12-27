@@ -82,7 +82,7 @@ jobs:
         if: ${{ matrix.config.name == 'intel' || matrix.config.name == 'oneapi' }}
         with:
           install-classic: ${{ matrix.config.name == 'intel' }}
-          intel-version: ${{ matrix.config.version }}
+          classic-version: ${{ matrix.config.version }}
           install-oneapi: ${{ matrix.config.name == 'oneapi' }}
           oneapi-version: ${{ matrix.config.version }}
           install-mpi: true
