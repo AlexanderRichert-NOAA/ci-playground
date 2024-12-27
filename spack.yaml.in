@@ -1,17 +1,11 @@
 spack:
-  definitions:
-  - packages:
-    - bacio
-    - w3emc
-  - compilers: [@COMPILERLIST@]
   specs:
   - matrix:
-    - [$packages]
-    - [$compilers]
+    - bacio
+    - w3emc
   view: false
   concretizer:
     unify: when_possible
   packages:
     all:
-      require:
-        - one_of: ['%gcc', '%intel', '%oneapi']
+      prefer: '%@COMPILER@'

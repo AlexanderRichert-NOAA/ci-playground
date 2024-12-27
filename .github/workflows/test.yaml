@@ -11,6 +11,23 @@ jobs:
         compiler:
         - {
             name: "gcc"
+            version: "10"
+          }
+        - {
+            name: "gcc"
+            version: "11"
+          }
+        - {
+            name: "gcc"
+            version: "12"
+          }
+        - {
+            name: "gcc"
+            version: "13"
+          }
+        - {
+            name: "gcc"
+            version: "14"
           }
         - {
             name: "intel",
@@ -24,6 +41,19 @@ jobs:
             version: "2025.0"
           }
         os: [ubuntu-22.04, ubuntu-24.04]
+        exclude:
+          - compiler.name: gcc
+            compiler.version: 13
+            os: ubuntu-22.04
+          - compiler.name: gcc
+            compiler.version: 14
+            os: ubuntu-22.04
+          - compiler.name: gcc
+            compiler.version: 10
+            os: ubuntu-24.04
+          - compiler.name: gcc
+            compiler.version: 11
+            os: ubuntu-24.04
     runs-on: ${{ matrix.os }}
     permissions:
       packages: write
@@ -49,14 +79,11 @@ jobs:
         run: |
           spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
-          COMPILERLIST="'%${{ matrix.compiler.name }}'"
           if [ ${{ matrix.compiler.name }} == 'gcc' ]; then
-            if [ ${{ matrix.os }} == 'ubuntu-22.04' ]; then gccvers='10 11 12'; fi
-            if [ ${{ matrix.os }} == 'ubuntu-24.04' ]; then gccvers='12 13 14'; fi
-            sudo apt install $(for ver in $gccvers; do echo gcc-$ver g++-$ver gfortran-$ver ; done)
-            COMPILERLIST=$(for ver in $gccvers; do echo "'%gcc@$ver'"; done | tr '\n' ',')
+            sudo apt install gcc-${{ matrix.compiler.version }} g++-${{ matrix.compiler.version }} gfortran-${{ matrix.compiler.version }}
           fi
-          sed "s|@COMPILERLIST@|$COMPILERLIST|" spack.yaml.in > spack.yaml
+          COMPILER=${{ matrix.compiler.name }}@${{ matrix.compiler.version }}
+          sed "s|@COMPILER@|$COMPILER|" spack.yaml.in > spack.yaml
           cat spack.yaml
           spack compiler find
           spack -e . concretize |& tee log.concretize
