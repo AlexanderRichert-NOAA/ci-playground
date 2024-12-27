@@ -79,13 +79,14 @@ jobs:
         uses: spack/setup-spack@v2.1.1
       - name: "Get Intel"
         uses: NOAA-EMC/ci-install-intel-toolkit@develop
-        if: ${{ matrix.compiler.name == 'intel' || matrix.compiler.name == 'oneapi' }}
+        if: ${{ matrix.config.name == 'intel' || matrix.config.name == 'oneapi' }}
         with:
-          install-classic: ${{ matrix.compiler.name == 'intel' }}
-          install-oneapi: ${{ matrix.compiler.name == 'oneapi' }}
-          oneapi-version: ${{ matrix.compiler.version }}
+          install-classic: ${{ matrix.config.name == 'intel' }}
+          intel-version: ${{ matrix.config.version }}
+          install-oneapi: ${{ matrix.config.name == 'oneapi' }}
+          oneapi-version: ${{ matrix.config.version }}
           install-mpi: true
-          compiler-setup: ${{ matrix.compiler.name }}
+          compiler-setup: ${{ matrix.config.name }}
       - name: "Build and cache packages"
         shell: spack-bash {0}
         env:
@@ -94,10 +95,10 @@ jobs:
         run: |
           spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
-          if [ ${{ matrix.compiler.name }} == 'gcc' ]; then
-            sudo apt install gcc-${{ matrix.compiler.version }} g++-${{ matrix.compiler.version }} gfortran-${{ matrix.compiler.version }}
+          if [ ${{ matrix.config.name }} == 'gcc' ]; then
+            sudo apt install gcc-${{ matrix.config.version }} g++-${{ matrix.config.version }} gfortran-${{ matrix.config.version }}
           fi
-          COMPILER=${{ matrix.compiler.name }}@${{ matrix.compiler.version }}
+          COMPILER="${{ matrix.config.name }}@${{ matrix.config.version }}"
           sed "s|@COMPILER@|$COMPILER|" spack.yaml.in > spack.yaml
           cat spack.yaml
           spack compiler find
