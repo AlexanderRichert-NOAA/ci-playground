@@ -94,6 +94,7 @@ jobs:
             spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux
           elif [ ${{ matrix.config.name }} == 'intel' ]; then
             intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux/bin/intel64/ | grep -oP "intel@\K[\d\.]+")
+            sed 's|environment: {}|environment:\n      prepend_path: {LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux/compiler/lib/intel64_lin}|' -i spack.yaml
             COMPILER=intel@$intelversion
           fi
           spack config add "packages:all:prefer:['%$COMPILER']"
