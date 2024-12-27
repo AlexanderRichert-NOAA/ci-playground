@@ -121,6 +121,7 @@ jobs:
           if [ ${{ matrix.config.mpi }} == intel-oneapi-mpi ]; then
             # Apply patch for detecting Intel MPI (https://github.com/spack/spack/pull/45474)
             cp packages/intel-oneapi-mpi/package.py $(spack location --package-dir intel-oneapi-mpi)/.
+            EDITOR=cat spack edit intel-oneapi-mpi
           else
             sudo apt install ${{ matrix.config.mpi }}
           fi
