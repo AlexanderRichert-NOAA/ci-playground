@@ -119,9 +119,8 @@ jobs:
           spack config add "packages:mpi:require:'${{ matrix.config.mpi }}'"
           spack config add "packages:mpi:buildable:false"
           if [ ${{ matrix.config.mpi }} == intel-oneapi-mpi ]; then
-            # Apply patch for detecting Intel MPI (https://github.com/spack/spack/pull/45474)
-            cp packages/intel-oneapi-mpi/package.py $(spack location --package-dir intel-oneapi-mpi)/.
-            EDITOR=cat spack edit intel-oneapi-mpi
+            intel_mpi_version=$(basename $(realpath /opt/intel/oneapi/mpi/latest))
+            echo "  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${intel_mpi_version}\n        prefix: /opt/intel/oneapi"  >> spack.yaml
           else
             sudo apt install ${{ matrix.config.mpi }}
           fi
