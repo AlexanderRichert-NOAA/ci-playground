@@ -86,6 +86,7 @@ jobs:
           spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
           COMPILER="${{ matrix.config.name }}@${{ matrix.config.version }}"
+          spack env activate .
           if [ ${{ matrix.config.name }} == 'gcc' ]; then
             sudo apt install gcc-${{ matrix.config.version }} g++-${{ matrix.config.version }} gfortran-${{ matrix.config.version }}
           elif [ ${{ matrix.config.name }} == 'oneapi' ]; then
@@ -94,9 +95,10 @@ jobs:
             intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux/bin/intel64/ | grep -oP "intel@\K[\d\.]+")
             COMPILER=intel@$intelversion
           fi
-          spack -e . config add "packages:all:prefer:['%$COMPILER']"
-          spack -e . external find python perl cmake gmake
+          spack config add "packages:all:prefer:['%$COMPILER']"
+          sudo mv /usr/local /usr/local_mv
+          spack external find python perl cmake gmake
           cat spack.yaml
-          spack -e . concretize --fresh |& tee log.concretize
-          spack -e . install --no-check-signature --fail-fast --show-log-on-error
-          spack -e . buildcache push --update-index spack-build-cache
+          spack concretize --fresh |& tee log.concretize
+          spack install --no-check-signature --fail-fast --show-log-on-error
+          spack buildcache push --update-index spack-build-cache
