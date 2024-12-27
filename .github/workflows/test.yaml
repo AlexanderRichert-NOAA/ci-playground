@@ -51,16 +51,6 @@ jobs:
           }
         - {
             name: "oneapi",
-            version: "2023.2.1",
-            os: "ubuntu-22.04",
-          }
-        - {
-            name: "oneapi",
-            version: "2023.2.1",
-            os: "ubuntu-24.04",
-          }
-        - {
-            name: "oneapi",
             version: "2025.0",
             os: "ubuntu-22.04",
           }
