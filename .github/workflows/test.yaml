@@ -10,19 +10,19 @@ jobs:
       matrix:
         compiler:
         - {
-            name: "gcc"
+            name: "gcc",
             version: "10"
           }
         - {
-            name: "gcc"
+            name: "gcc",
             version: "11"
           }
         - {
-            name: "gcc"
+            name: "gcc",
             version: "12"
           }
         - {
-            name: "gcc"
+            name: "gcc",
             version: "13"
           }
         - {
