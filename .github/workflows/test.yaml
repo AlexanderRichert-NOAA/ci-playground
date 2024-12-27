@@ -40,6 +40,7 @@ jobs:
           install-oneapi: ${{ matrix.compiler.name == 'oneapi' }}
           oneapi-version: ${{ matrix.compiler.version }}
           install-mpi: true
+          compiler-setup: ${{ matrix.compiler.name }}
       - name: "Build and cache packages"
         shell: spack-bash {0}
         env:
@@ -49,7 +50,7 @@ jobs:
           spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
           COMPILERLIST="'%${{ matrix.compiler.name }}'"
-          if [ $COMPILERLIST == '%gcc' ]; then
+          if [ ${{ matrix.compiler.name }} == 'gcc' ]; then
             if [ ${{ matrix.os }} == 'ubuntu-22.04' ]; then gccvers='10 11 12'; fi
             if [ ${{ matrix.os }} == 'ubuntu-24.04' ]; then gccvers='12 13 14'; fi
             sudo apt install $(for ver in $gccvers; do echo gcc-$ver g++-$ver gfortran-$ver ; done)
