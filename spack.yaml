@@ -1,4 +1,7 @@
 spack:
+  view: false
+  concretizer:
+    unify: when_possible
   specs:
 # Various NCEPLIBS dependencies:
   - bacio
@@ -22,8 +25,3 @@ spack:
   - ncio@1.1.2
   - crtm@2.4.0.1
   - gsi-ncdiag@1.1.2
-  - matrix:
-    - [$packages]
-  view: false
-  concretizer:
-    unify: when_possible
