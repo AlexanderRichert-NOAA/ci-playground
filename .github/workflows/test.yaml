@@ -47,6 +47,42 @@ jobs:
             mpi: "mpich",
           }
         - {
+            name: "gcc",
+            version: "10",
+            os: "ubuntu-22.04",
+            mpi: "openmpi",
+          }
+        - {
+            name: "gcc",
+            version: "11",
+            os: "ubuntu-22.04",
+            mpi: "openmpi",
+          }
+        - {
+            name: "gcc",
+            version: "12",
+            os: "ubuntu-22.04",
+            mpi: "openmpi",
+          }
+        - {
+            name: "gcc",
+            version: "12",
+            os: "ubuntu-24.04",
+            mpi: "openmpi",
+          }
+        - {
+            name: "gcc",
+            version: "13",
+            os: "ubuntu-24.04",
+            mpi: "openmpi",
+          }
+        - {
+            name: "gcc",
+            version: "14",
+            os: "ubuntu-24.04",
+            mpi: "openmpi",
+          }
+        - {
             name: "intel",
             version: "2023.2.1",
             os: "ubuntu-22.04",
