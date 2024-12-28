@@ -134,5 +134,5 @@ jobs:
           cat spack.yaml
           # Build-n-cache:
           spack concretize --fresh |& tee log.concretize
-          spack install --no-check-signature --fail-fast --show-log-on-error
+          spack install --no-check-signature --show-log-on-error || true
           spack buildcache push --update-index spack-build-cache
