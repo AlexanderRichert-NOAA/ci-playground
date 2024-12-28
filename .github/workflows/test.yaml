@@ -107,11 +107,11 @@ jobs:
           spack env activate .
           if [ ${{ matrix.config.name }} == 'gcc' ]; then
             sudo apt install gcc-${{ matrix.config.version }} g++-${{ matrix.config.version }} gfortran-${{ matrix.config.version }}
-            spack config add "packages:gcc-runtime:require:'@${{ matrix.config.version }}'"
+            spack config add "packages:gcc-runtime:require:'%gcc@${{ matrix.config.version }}'"
           else # set GCC backend for Intel to be the Ubuntu default version of GCC
             if [ ${{ matrix.config.os }} == ubuntu-22.04 ]; then gccver=11; fi
             if [ ${{ matrix.config.os }} == ubuntu-24.04 ]; then gccver=13; fi
-            spack config add "packages:gcc-runtime:require:'@${gccver}'"
+            spack config add "packages:gcc-runtime:require:'%gcc@${gccver}'"
           fi
           if [ ${{ matrix.config.name }} == 'oneapi' ]; then
             spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux
