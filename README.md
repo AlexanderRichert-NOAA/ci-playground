@@ -1,4 +1,4 @@
-![workflowstatus](https://github.com/AlexanderRichert-NOAA/ci-playground/actions/workflows/test.yaml/badge.svg)
+![workflowstatus](https://github.com/AlexanderRichert-NOAA/ci-playground/actions/workflows/build.yaml/badge.svg)
 
 Packages that must be provided by GitHub Actions workflows using these packages:
 - Spack (to concretize environment and access/install from build cache)
