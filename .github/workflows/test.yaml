@@ -14,19 +14,19 @@ jobs:
             name: "gcc",
             version: "10",
             os: "ubuntu-22.04",
-            mpi: "mpich",
+            mpi: "openmpi",
           }
         - {
             name: "gcc",
             version: "11",
             os: "ubuntu-22.04",
-            mpi: "mpich",
+            mpi: "openmpi",
           }
         - {
             name: "gcc",
             version: "12",
             os: "ubuntu-22.04",
-            mpi: "mpich",
+            mpi: "openmpi",
           }
         - {
             name: "gcc",
