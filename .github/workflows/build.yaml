@@ -11,101 +11,113 @@ jobs:
       matrix:
         config:
         - {
-            name: "gcc",
-            version: "10",
+            compiler: "gcc",
+            compiler-version: "10",
             os: "ubuntu-22.04",
             mpi: "mpich",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "11",
+            compiler: "gcc",
+            compiler-version: "11",
             os: "ubuntu-22.04",
             mpi: "mpich",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "12",
+            compiler: "gcc",
+            compiler-version: "12",
             os: "ubuntu-22.04",
             mpi: "mpich",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "12",
+            compiler: "gcc",
+            compiler-version: "12",
             os: "ubuntu-24.04",
             mpi: "mpich",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "13",
+            compiler: "gcc",
+            compiler-version: "13",
             os: "ubuntu-24.04",
             mpi: "mpich",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "14",
+            compiler: "gcc",
+            compiler-version: "14",
             os: "ubuntu-24.04",
             mpi: "mpich",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "10",
+            compiler: "gcc",
+            compiler-version: "10",
             os: "ubuntu-22.04",
             mpi: "openmpi",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "11",
+            compiler: "gcc",
+            compiler-version: "11",
             os: "ubuntu-22.04",
             mpi: "openmpi",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "12",
+            compiler: "gcc",
+            compiler-version: "12",
             os: "ubuntu-22.04",
             mpi: "openmpi",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "12",
+            compiler: "gcc",
+            compiler-version: "12",
             os: "ubuntu-24.04",
             mpi: "openmpi",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "13",
+            compiler: "gcc",
+            compiler-version: "13",
             os: "ubuntu-24.04",
             mpi: "openmpi",
+            mpi-version: ":",
           }
         - {
-            name: "gcc",
-            version: "14",
+            compiler: "gcc",
+            compiler-version: "14",
             os: "ubuntu-24.04",
             mpi: "openmpi",
+            mpi-version: ":",
           }
         - {
-            name: "intel",
-            version: "2023.2.1",
+            compiler: "intel",
+            compiler-version: "2023.2.1",
             os: "ubuntu-22.04",
             mpi: "intel-oneapi-mpi",
             mpi-version: "2021.14",
           }
         - {
-            name: "intel",
-            version: "2023.2.1",
+            compiler: "intel",
+            compiler-version: "2023.2.1",
             os: "ubuntu-24.04",
             mpi: "intel-oneapi-mpi",
             mpi-version: "2021.14",
           }
         - {
-            name: "oneapi",
-            version: "2025.0",
+            compiler: "oneapi",
+            compiler-version: "2025.0",
             os: "ubuntu-22.04",
             mpi: "intel-oneapi-mpi",
             mpi-version: "2021.14",
           }
         - {
-            name: "oneapi",
-            version: "2025.0",
+            compiler: "oneapi",
+            compiler-version: "2025.0",
             os: "ubuntu-24.04",
             mpi: "intel-oneapi-mpi",
             mpi-version: "2021.14",
@@ -120,15 +132,15 @@ jobs:
         uses: spack/setup-spack@v2.1.1
       - name: "Get Intel"
         uses: NOAA-EMC/ci-install-intel-toolkit@develop
-        if: ${{ matrix.config.name == 'intel' || matrix.config.name == 'oneapi' }}
+        if: ${{ matrix.config.compiler == 'intel' || matrix.config.compiler == 'oneapi' }}
         with:
-          install-classic: ${{ matrix.config.name == 'intel' }}
-          classic-version: ${{ matrix.config.version }}
-          install-oneapi: ${{ matrix.config.name == 'oneapi' }}
-          oneapi-version: ${{ matrix.config.version }}
+          install-classic: ${{ matrix.config.compiler == 'intel' }}
+          classic-version: ${{ matrix.config.compiler-version }}
+          install-oneapi: ${{ matrix.config.compiler == 'oneapi' }}
+          oneapi-version: ${{ matrix.config.compiler-version }}
           install-mpi: true
           mpi-version: ${{ matrix.config.mpi-version }}
-          compiler-setup: ${{ matrix.config.name }}
+          compiler-setup: ${{ matrix.config.compiler }}
       - name: "Build and cache packages"
         shell: spack-bash {0}
         env:
@@ -139,29 +151,29 @@ jobs:
           # Set up mirror for build caching:
           spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
-          COMPILER="${{ matrix.config.name }}@${{ matrix.config.version }}"
+          COMPILER="${{ matrix.config.compiler }}@${{ matrix.config.compiler-version }}"
           # Activate environment and set up compilers:
           spack env activate .
-          if [ ${{ matrix.config.name }} == 'gcc' ]; then
-            sudo apt install gcc-${{ matrix.config.version }} g++-${{ matrix.config.version }} gfortran-${{ matrix.config.version }}
-            spack config add "packages:gcc-runtime:require:'%gcc@${{ matrix.config.version }}'"
+          if [ ${{ matrix.config.compiler }} == 'gcc' ]; then
+            sudo apt install gcc-${{ matrix.config.compiler-version }} g++-${{ matrix.config.compiler-version }} gfortran-${{ matrix.config.compiler-version }}
+            spack config add "packages:gcc-runtime:require:'%gcc@${{ matrix.config.compiler-version }}'"
           else # set GCC backend for Intel to be the Ubuntu default version of GCC
             if [ ${{ matrix.config.os }} == ubuntu-22.04 ]; then gccver=11; fi
             if [ ${{ matrix.config.os }} == ubuntu-24.04 ]; then gccver=13; fi
             spack config add "packages:gcc-runtime:require:'%gcc@${gccver}'"
           fi
-          if [ ${{ matrix.config.name }} == 'oneapi' ]; then
-            spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux
-          elif [ ${{ matrix.config.name }} == 'intel' ]; then
-            intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux/bin/intel64/ | grep -oP "intel@\K[\d\.]+")
-            sed 's|environment: {}|environment:\n        prepend_path: {LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/${{ matrix.config.version }}/linux/compiler/lib/intel64_lin}|' -i spack.yaml
+          if [ ${{ matrix.config.compiler }} == 'oneapi' ]; then
+            spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux
+          elif [ ${{ matrix.config.compiler }} == 'intel' ]; then
+            intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux/bin/intel64/ | grep -oP "intel@\K[\d\.]+")
+            sed 's|environment: {}|environment:\n        prepend_path: {LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux/compiler/lib/intel64_lin}|' -i spack.yaml
             COMPILER=intel@$intelversion
           fi
           spack config add "packages:all:prefer:['%$COMPILER']"
           # MPI setup. Always use external to avoid a mess of dependencies.
           # This means that users of any cached MPI-based packages must have
           # the appropriate MPI library installed in their own workflow via apt.
-          spack config add "packages:mpi:require:'${{ matrix.config.mpi }}'"
+          spack config add "packages:mpi:require:'${{ matrix.config.mpi }}@${{ matrix.config.mpi-version }}'"
           if [ "${{ matrix.config.mpi }}" == intel-oneapi-mpi ]; then
             sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${{ matrix.config.mpi-version }}\n        prefix: /opt/intel/oneapi|" spack.yaml
             spack config add "packages:mpi:buildable:false"
