@@ -168,7 +168,7 @@ jobs:
           fi
           # Find externals, including MPI:
           sudo apt install cmake
-          spack external find --all --exclude intel --exclude oneapi --exclude clang --exclude llvm --exclude llvm-doe --exclude curl
+          spack external find --all --exclude intel --exclude oneapi --exclude clang --exclude llvm --exclude llvm-doe --exclude curl --exclude zlib
           cat spack.yaml
           # Build-n-cache:
           spack concretize --fresh |& tee log.concretize
