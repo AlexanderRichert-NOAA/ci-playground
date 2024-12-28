@@ -11,7 +11,7 @@ spack:
   - w3emc
   - zlib
 # GSI (https://github.com/NOAA-EMC/GSI/blob/develop/ci/spack.yaml):
-  - netcdf-c@4.9.2
+  - netcdf-c@4.9.2 +mpi ~blosc
   - netcdf-fortran@4.6.1
   - bufr@11.7.0
   - bacio@2.4.1
