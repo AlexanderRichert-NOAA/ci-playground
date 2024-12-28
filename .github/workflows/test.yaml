@@ -132,5 +132,10 @@ jobs:
           cat spack.yaml
           # Build-n-cache:
           spack concretize --fresh |& tee log.concretize
-          spack install --no-check-signature --show-log-on-error || true
+          set +e
+          spack install g2c
+          spack install --no-check-signature --show-log-on-error --fail-fastttt blahhh
+          rc=$?
+          set -e
           spack buildcache push --update-index spack-build-cache
+          return $rc
