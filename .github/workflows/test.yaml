@@ -162,7 +162,7 @@ jobs:
           # This means that users of any cached MPI-based packages must have
           # the appropriate MPI library installed in their own workflow via apt.
           spack config add "packages:mpi:require:'${{ matrix.config.mpi }}'"
-          if [ ${{ matrix.config.mpi }} == intel-oneapi-mpi ]; then
+          if [ "${{ matrix.config.mpi }}" == intel-oneapi-mpi ]; then
             sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${{ matrix.config.mpi-version }}\n        prefix: /opt/intel/oneapi|" spack.yaml
             spack config add "packages:mpi:buildable:false"
           fi
