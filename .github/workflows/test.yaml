@@ -133,8 +133,7 @@ jobs:
           # Build-n-cache:
           spack concretize --fresh |& tee log.concretize
           set +e
-          spack install --no-check-signature g2c
-          spack install --no-check-signature --show-log-on-error --fail-fastttt blahhh
+          spack install --no-check-signature --show-log-on-error --fail-fast
           rc=$?
           set -e
           spack buildcache push --update-index spack-build-cache
