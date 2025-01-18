@@ -154,6 +154,7 @@ jobs:
           COMPILER="${{ matrix.config.compiler }}@${{ matrix.config.compiler-version }}"
           # Activate environment and set up compilers:
           spack env activate .
+          spack config add 'config:install_tree:padded_length:200'
           if [ ${{ matrix.config.compiler }} == 'gcc' ]; then
             sudo apt install gcc-${{ matrix.config.compiler-version }} g++-${{ matrix.config.compiler-version }} gfortran-${{ matrix.config.compiler-version }}
             spack config add "packages:gcc-runtime:require:'%gcc@${{ matrix.config.compiler-version }}'"
