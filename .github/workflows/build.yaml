@@ -185,7 +185,7 @@ jobs:
           # Build-n-cache:
           spack concretize --fresh |& tee log.concretize
           set +e
-          spack install --no-check-signature --show-log-on-error --fail-fast
+          spack install --no-check-signature --show-log-on-error --fail-fast --no-cache # use --no-cache to force rebuild
           rc=$?
           set -e
           spack buildcache push --update-index spack-build-cache
