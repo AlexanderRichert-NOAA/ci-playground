@@ -171,16 +171,14 @@ jobs:
             COMPILER=intel@$intelversion
           fi
           spack config add "packages:all:prefer:['%$COMPILER']"
-          # MPI setup. Always use external to avoid a mess of dependencies.
-          # This means that users of any cached MPI-based packages must have
-          # the appropriate MPI library installed in their own workflow via apt.
+          # MPI setup.
           spack config add "packages:mpi:require:'${{ matrix.config.mpi }}@${{ matrix.config.mpi-version }}'"
           if [ "${{ matrix.config.mpi }}" == intel-oneapi-mpi ]; then
             sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${{ matrix.config.mpi-version }}\n        prefix: /opt/intel/oneapi|" spack.yaml
             spack config add "packages:mpi:buildable:false"
           fi
-          # Find external MPI and GCC:
-          spack external find openmpi mpich gcc
+          # Find GCC:
+          spack external find gcc
           cat spack.yaml
           # Build-n-cache:
           spack concretize --fresh |& tee log.concretize
