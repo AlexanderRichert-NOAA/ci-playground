@@ -179,7 +179,6 @@ jobs:
             spack config add "packages:mpi:buildable:false"
           fi
           # Find externals, including MPI:
-          sudo apt install cmake
           spack external find --all --exclude intel --exclude oneapi --exclude clang --exclude llvm --exclude llvm-doe --exclude curl --exclude zlib
           cat spack.yaml
           # Build-n-cache:
