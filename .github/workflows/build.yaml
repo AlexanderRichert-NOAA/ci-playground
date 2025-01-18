@@ -179,8 +179,8 @@ jobs:
             sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${{ matrix.config.mpi-version }}\n        prefix: /opt/intel/oneapi|" spack.yaml
             spack config add "packages:mpi:buildable:false"
           fi
-          # Find externals, including MPI:
-          spack external find --all --exclude intel --exclude oneapi --exclude clang --exclude llvm --exclude llvm-doe --exclude curl --exclude zlib
+          # Find external MPI and GCC:
+          spack external find openmpi mpich gcc
           cat spack.yaml
           # Build-n-cache:
           spack concretize --fresh |& tee log.concretize
