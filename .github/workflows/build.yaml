@@ -171,6 +171,10 @@ jobs:
             intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux/bin/intel64/ | grep -oP "intel@\K[\d\.]+")
             sed 's|environment: {}|environment:\n        prepend_path: {LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux/compiler/lib/intel64_lin}|' -i spack.yaml
             COMPILER=intel@$intelversion
+            # Use external CMake for %intel builds
+            sudo apt-get install cmake
+            spack external find cmake
+            spack config add 'packages:cmake:buildable:false'
           fi
           spack config add "packages:all:prefer:['%$COMPILER']"
           # MPI setup.
