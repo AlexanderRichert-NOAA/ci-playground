@@ -170,7 +170,7 @@ jobs:
           elif [ ${{ matrix.config.compiler }} == 'intel' ]; then
             intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux/bin/intel64/ | grep -oP "intel@\K[\d\.]+")
             sed 's|environment: {}|environment:\n        prepend_path: {LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux/compiler/lib/intel64_lin}|' -i spack.yaml
-            sudo apt install gcc-12 g++-12
+            sudo apt install gcc-12 g++-12 cmake
             sed 's|flags: {}|flags:\n        cflags: -gcc-name=gcc-12\n        cxxflags: -gcc-name=gcc-12 -gxx-name=g++-12|' -i spack.yaml
             spack external find cmake
             spack config add 'packages:cmake:buildable:false'
