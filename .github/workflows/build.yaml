@@ -174,12 +174,12 @@ jobs:
             #spack external find cmake git-lfs
             #spack config add 'packages:cmake:buildable:false'
             #spack config add 'packages:git-lfs:buildable:false'
-            for pkg in diffutils sed grep libidn2 tar; do
+            for pkg in diffutils sed grep libidn2 tar berkeley-db gettext; do
               spack config add "packages:${pkg}:require:'%gcc@${gccver}'"
             done
-            if [ "${{ matrix.config.os }}" == ubuntu-24.04 ]; then
-              sed -i "s|flags: {}|flags:\n        cflags: '-gcc-name=gcc-12'\n        cxxflags: '-gcc-name=gcc-12 -gxx-name=g++-12'|" spack.yaml
-            fi
+            #if [ "${{ matrix.config.os }}" == ubuntu-24.04 ]; then
+            #  sed -i "s|flags: {}|flags:\n        cflags: '-gcc-name=gcc-12'\n        cxxflags: '-gcc-name=gcc-12 -gxx-name=g++-12'|" spack.yaml
+            #fi
             COMPILER=intel@$intelversion
           fi
           spack config add "packages:all:prefer:['%$COMPILER']"
