@@ -178,7 +178,7 @@ jobs:
               spack config add "packages:${pkg}:require:'%gcc@${gccver}'"
             done
             if [ "${{ matrix.config.os }}" == ubuntu-24.04 ]; then
-              sed -i "s|flags: {}|flags:\n        cflags='-gcc-name=gcc-12' cxxflags='-gcc-name=gcc-12 -gxx-name=g++-12'|" spack.yaml
+              sed -i "s|flags: {}|flags:\n        cflags: '-gcc-name=gcc-12'\n        cxxflags: '-gcc-name=gcc-12 -gxx-name=g++-12'|" spack.yaml
             fi
             COMPILER=intel@$intelversion
           fi
