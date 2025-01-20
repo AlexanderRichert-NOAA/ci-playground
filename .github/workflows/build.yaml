@@ -174,7 +174,7 @@ jobs:
             #spack external find cmake git-lfs
             #spack config add 'packages:cmake:buildable:false'
             #spack config add 'packages:git-lfs:buildable:false'
-            for pkg in diffutils sed grep; do
+            for pkg in diffutils sed grep libidn2; do
               spack config add "packages:${pkg}:require:'%gcc@${gccver}'"
             done
             COMPILER=intel@$intelversion
