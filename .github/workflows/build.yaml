@@ -4,7 +4,7 @@ on:
     branches:
       - master
   schedule:
-    - cron: '0 0 * * SUN'
+    - cron: '0 0 * * SAT'
 
 jobs:
   spack-build-cache:
@@ -170,10 +170,7 @@ jobs:
           elif [ ${{ matrix.config.compiler }} == 'intel' ]; then
             intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux/bin/intel64/ | grep -oP "intel@\K[\d\.]+")
             sed 's|environment: {}|environment:\n        prepend_path: {LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux/compiler/lib/intel64_lin}|' -i spack.yaml
-            #sudo apt install cmake git-lfs
-            #spack external find cmake git-lfs
-            #spack config add 'packages:cmake:buildable:false'
-            #spack config add 'packages:git-lfs:buildable:false'
+            # Avoid various C++-related Intel compiler bugs by building some packages with GCC:
             for pkg in diffutils sed grep libidn2 tar berkeley-db gettext findutils cmake; do
               spack config add "packages:${pkg}:require:'%gcc@${gccver}'"
             done
