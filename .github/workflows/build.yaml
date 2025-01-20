@@ -171,7 +171,7 @@ jobs:
             intelversion=$(spack compiler find /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux/bin/intel64/ | grep -oP "intel@\K[\d\.]+")
             sed 's|environment: {}|environment:\n        prepend_path: {LD_LIBRARY_PATH: /opt/intel/oneapi/compiler/${{ matrix.config.compiler-version }}/linux/compiler/lib/intel64_lin}|' -i spack.yaml
             sudo apt install gcc-12 g++-12 cmake git-lfs
-            sed 's|flags: {}|flags:\n        cflags: -gcc-name=gcc-12\n        cxxflags: -gcc-name=gcc-12 -gxx-name=g++-12|' -i spack.yaml
+            sed 's|flags: {}|flags:\n        cflags: -gcc-name=gcc-12 -std=c17\n        cxxflags: -gcc-name=gcc-12 -gxx-name=g++-12 -std=c++17|' -i spack.yaml
             spack external find cmake git-lfs
             spack config add 'packages:cmake:buildable:false'
             spack config add 'packages:git-lfs:buildable:false'
