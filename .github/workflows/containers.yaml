@@ -32,8 +32,7 @@ jobs:
           spack add gmake
           spack concretize
           spack install --no-check-signature
-          spack buildcache push --unsigned spack-build-cache gmake
-          spack buildcache update-index spack-build-cache
+          spack buildcache push --update-index --unsigned spack-build-cache gmake
           echo -e "  container:\n    images:\n      os: '${OSLABEL/-/:}'\n      spack: develop\n    strip: false" >> $SPACK_ENV/spack.yaml
           cd $SPACK_ENV
           spack containerize > Dockerfile
