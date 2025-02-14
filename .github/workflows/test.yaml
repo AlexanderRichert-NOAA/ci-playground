@@ -1,0 +1,19 @@
+name: containers
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  container-run-test:
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/alexanderrichert-noaa/ci-playground-ubuntu-24.04:sha256-709feab66591f4b39dd35de153cbd8b2766eafc8212a0a7560ab34e6d23c8fda
+      credentials:
+         username: ${{ github.actor }}
+         password: ${{ secrets.github_token }}
+    steps:
+      - name: test
+        run: |
+          which make
+          make -v
