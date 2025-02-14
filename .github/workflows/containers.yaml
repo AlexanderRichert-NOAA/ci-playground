@@ -6,7 +6,10 @@ on:
 
 jobs:
   container-build:
-    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
     permissions:
       packages: write
 
@@ -20,6 +23,7 @@ jobs:
         env:
           OCI_USERNAME: ${{ github.repository_owner }}
           OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OSLABEL: ${{ matrix.os }}
         run: |
           spack env create test
           spack env activate test
@@ -30,7 +34,7 @@ jobs:
           spack install --no-check-signature
           spack buildcache push --unsigned spack-build-cache gmake
           spack buildcache update-index spack-build-cache
-          echo -e "  container:\n    images:\n      os: '${RUNNER_OS/-/:}'\n      spack: develop" >> $SPACK_ENV/spack.yaml
+          echo -e "  container:\n    images:\n      os: '${OSLABEL/-/:}'\n      spack: develop" >> $SPACK_ENV/spack.yaml
           cd $SPACK_ENV
           spack containerize > Dockerfile
-          sudo docker build -t myapp-${RUNNER_OS} .
+          sudo docker build -t myapp-${OSLABEL} .
