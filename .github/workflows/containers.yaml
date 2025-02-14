@@ -20,6 +20,7 @@ jobs:
           OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           spack env create test
+          spack env activate test
           spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
           spack add gmake
