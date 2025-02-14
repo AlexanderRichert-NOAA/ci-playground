@@ -17,7 +17,7 @@ jobs:
       id-token: write
     env:
       REGISTRY: ghcr.io
-      IMAGE_NAME: emc-stack-${{ matrix.os }} # add whatever matrix elements
+      IMAGE_NAME: emc-stack # add whatever matrix elements
 
     steps:
 
