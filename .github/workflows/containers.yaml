@@ -1,0 +1,32 @@
+name: containers
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  container-build:
+    os: ubuntu-24.04
+
+    steps:
+
+      - name: "Get Spack"
+        uses: spack/setup-spack@v2.1.1
+
+      - name: "Spack build"
+        shell: spack-bash {0}
+        env:
+          OCI_USERNAME: ${{ github.repository_owner }}
+          OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          spack env create test
+          spack mirror add spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
+          spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
+          spack add gmake
+          spack concretize
+          spack install --no-check-signature
+          spack buildcache push --unsigned spack-build-cache gmake
+          spack buildcache update-index spack-build-cache
+          echo -e "  container:\n    images:\n      os: '${RUNNER_OS/-/:}'\n      spack: develop" >> $SPACK_ENV/spack.yaml
+          spack containerize > Dockerfile
+          sudo docker build -t myapp-${RUNNER_OS} .
