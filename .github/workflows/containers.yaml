@@ -31,5 +31,6 @@ jobs:
           spack buildcache push --unsigned spack-build-cache gmake
           spack buildcache update-index spack-build-cache
           echo -e "  container:\n    images:\n      os: '${RUNNER_OS/-/:}'\n      spack: develop" >> $SPACK_ENV/spack.yaml
+          cd $SPACK_ENV
           spack containerize > Dockerfile
           sudo docker build -t myapp-${RUNNER_OS} .
