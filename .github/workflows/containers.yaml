@@ -17,7 +17,7 @@ jobs:
       id-token: write
     env:
       REGISTRY: ghcr.io
-      IMAGE_NAME: ${{ github.repository }}-suffix # add whatever matrix elements
+      IMAGE_NAME: ${{ github.repository }}-${{ matrix.os }} # add whatever matrix elements
 
     steps:
 
