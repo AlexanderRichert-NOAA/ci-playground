@@ -71,3 +71,16 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+
+  container-run-test:
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/alexanderrichert-noaa/ci-playground-ubuntu-24.04
+      credentials:
+         username: ${{ github.actor }}
+         password: ${{ secrets.github_token }}
+    steps:
+      - name: test
+        run: |
+          which make
+          make -v
