@@ -34,7 +34,7 @@ jobs:
           spack install --no-check-signature
           spack buildcache push --unsigned spack-build-cache gmake
           spack buildcache update-index spack-build-cache
-          echo -e "  container:\n    images:\n      os: '${OSLABEL/-/:}'\n      spack: develop" >> $SPACK_ENV/spack.yaml
+          echo -e "  container:\n    images:\n      os: '${OSLABEL/-/:}'\n      spack: develop\n    strip: false" >> $SPACK_ENV/spack.yaml
           cd $SPACK_ENV
           spack containerize > Dockerfile
           sudo docker build -t myapp-${OSLABEL} .
