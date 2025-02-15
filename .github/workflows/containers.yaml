@@ -1,5 +1,4 @@
 name: containers
-#on: false
 on:
   push:
     branches:
@@ -38,7 +37,7 @@ jobs:
           spack env activate test
           spack mirror add --unsigned spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
-          spack add jasper zlib-ng libpng hdf5 netcdf-c netcdf-fortran parallelio esmf fms bacio crtm g2 g2tmpl ip@4.3.0 sp w3emc gftl-shared mapl scotch
+          spack add cmake gmake jasper zlib-ng libpng hdf5 netcdf-c netcdf-fortran parallelio esmf fms bacio crtm g2 g2tmpl ip@4.3.0 sp w3emc gftl-shared mapl scotch
           spack concretize
           spack install --no-check-signature
           spack buildcache push --update-index --unsigned spack-build-cache
@@ -74,3 +73,21 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
+
+  container-run-test:
+    needs: container-build
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/alexanderrichert-noaa/ci-playground-ubuntu-24.04:master
+    steps:
+      - name: test
+        env:
+          PATH: /opt/views/view/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        run: |
+          git clone --recurse-submodules https://github.com/ufs-community/ufs-weather-model
+          cd ufs-weather-model
+          mkdir build
+          cd build
+          cmake .. -DAPP=ATM
+          make -j2
+
