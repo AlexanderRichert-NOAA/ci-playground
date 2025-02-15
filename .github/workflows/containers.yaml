@@ -37,7 +37,7 @@ jobs:
           spack env activate test
           spack mirror add --unsigned spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
           spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
-          spack add cmake gmake jasper zlib-ng libpng hdf5 netcdf-c netcdf-fortran parallelio esmf fms precision=32,64 bacio@2.4.1 crtm g2 g2tmpl ip@4.3.0 sp w3emc gftl-shared mapl scotch
+          spack add git cmake gmake jasper zlib-ng libpng hdf5 netcdf-c netcdf-fortran parallelio esmf fms precision=32,64 bacio@2.4.1 crtm g2 g2tmpl ip@4.3.0 sp w3emc gftl-shared mapl scotch
           spack concretize
           spack install --no-check-signature
           spack buildcache push --update-index --unsigned spack-build-cache
@@ -84,6 +84,6 @@ jobs:
       - name: test
         run: |
           . /opt/spack-environment/activate.sh
-          git checkout --recurse-submodules https://github.com/ufs-weather-model
+          git clone --recurse-submodules https://github.com/ufs-weather-model
           cmake -S ufs-weather-model -B build -DAPP=ATM
           cmake --build build --parallel 2 --verbose
