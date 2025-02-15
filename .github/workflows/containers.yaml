@@ -86,7 +86,6 @@ jobs:
         env:
           PATH: /opt/views/view/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         run: |
-          apt install gcc g++ gfortran
           git clone --recurse-submodules https://github.com/ufs-community/ufs-weather-model
           cd ufs-weather-model
           mkdir build
