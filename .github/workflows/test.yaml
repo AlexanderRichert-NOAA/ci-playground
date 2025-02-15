@@ -1,9 +1,9 @@
 name: containers
-on: false
-#on:
-#  push:
-#    branches:
-#      - master
+#on: false
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   container-run-test:
@@ -15,5 +15,9 @@ jobs:
         env:
           PATH: /opt/views/view/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         run: |
-          which make
-          make -v
+          git clone --recurse-submodules https://github.com/ufs-community/ufs-weather-model
+          cd ufs-weather-model
+          mkdir build
+          cd build
+          cmake .. -DAPP=ATM
+          make -j2
