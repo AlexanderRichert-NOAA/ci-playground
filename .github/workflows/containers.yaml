@@ -24,6 +24,8 @@ jobs:
 
       - name: "Get Spack"
         uses: spack/setup-spack@v2.1.1
+        with:
+          buildcache: false
 
       - name: "Spack build"
         shell: spack-bash {0}
@@ -39,7 +41,7 @@ jobs:
           spack add jasper zlib-ng libpng hdf5 netcdf-c netcdf-fortran parallelio esmf fms bacio crtm g2 g2tmpl ip@4.3.0 sp w3emc gftl-shared mapl scotch
           spack concretize
           spack install --no-check-signature
-          spack buildcache push --update-index --unsigned spack-build-cache gmake
+          spack buildcache push --update-index --unsigned spack-build-cache
           echo -e "  container:\n    images:\n      os: '${OSLABEL/-/:}'\n      spack: develop\n    strip: false" >> $SPACK_ENV/spack.yaml
           cd $SPACK_ENV
           spack containerize > $GITHUB_WORKSPACE/Dockerfile
