@@ -1,17 +1,15 @@
 name: containers
-on:
-  push:
-    branches:
-      - master
+on: false
+#on:
+#  push:
+#    branches:
+#      - master
 
 jobs:
   container-run-test:
     runs-on: ubuntu-24.04
     container:
       image: ghcr.io/alexanderrichert-noaa/ci-playground-ubuntu-24.04:master
-#      credentials:
-#         username: ${{ github.actor }}
-#         password: ${{ secrets.github_token }}
     steps:
       - name: test
         env:
