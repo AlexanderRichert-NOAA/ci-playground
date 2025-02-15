@@ -41,7 +41,7 @@ jobs:
           spack concretize
           spack install --no-check-signature
           spack buildcache push --update-index --unsigned spack-build-cache
-          echo -e "  container:\n    images:\n      os: '${OSLABEL/-/:}'\n      spack: develop\n    strip: false\n    os_packages:\n      final: [gcc,g++,gfortran]" >> $SPACK_ENV/spack.yaml
+          echo -e "  container:\n    images:\n      os: '${OSLABEL/-/:}'\n      spack: develop\n    strip: false\n    os_packages:\n      final: [gcc,g++,gfortran,cmake,make]" >> $SPACK_ENV/spack.yaml
           cd $SPACK_ENV
           spack containerize > $GITHUB_WORKSPACE/Dockerfile
 
@@ -83,13 +83,11 @@ jobs:
         - /usr/bin:/usr/bin
     steps:
       - name: test
-        env:
-          PATH: /opt/views/view/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         run: |
+          . /opt/spack-environment/activate.sh
           git clone --recurse-submodules https://github.com/ufs-community/ufs-weather-model
           cd ufs-weather-model
           mkdir build
           cd build
           cmake .. -DAPP=ATM
           make -j2
-
