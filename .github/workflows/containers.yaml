@@ -79,6 +79,8 @@ jobs:
     runs-on: ubuntu-24.04
     container:
       image: ghcr.io/alexanderrichert-noaa/ci-playground-ubuntu-24.04:master
+      volumes:
+        - /usr/bin:/usr/bin
     steps:
       - name: test
         env:
