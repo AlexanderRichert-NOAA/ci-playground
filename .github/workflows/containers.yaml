@@ -79,6 +79,8 @@ jobs:
     runs-on: ubuntu-24.04
     container:
       image: ghcr.io/alexanderrichert-noaa/ci-playground-ubuntu-24.04:master
+    env:
+      PATH: /opt/views/view/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     steps:
 
       - name: Checkout
