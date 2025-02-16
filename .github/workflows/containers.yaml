@@ -84,6 +84,6 @@ jobs:
       - name: test
         run: |
           . /opt/spack-environment/activate.sh
-          git clone --recurse-submodules https://github.com/ufs-weather-model
+          git clone --recurse-submodules https://github.com/ufs-community/ufs-weather-model
           cmake -S ufs-weather-model -B build -DAPP=ATM
           cmake --build build --parallel 2 --verbose
