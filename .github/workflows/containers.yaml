@@ -5,80 +5,81 @@ on:
       - master
 
 jobs:
-  container-build:
-    strategy:
-      matrix:
-        os: [ubuntu-24.04]
-    runs-on: ${{ matrix.os }}
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
-    env:
-      REGISTRY: ghcr.io
-      IMAGE_NAME: ${{ github.repository }}-${{ matrix.os }} # add whatever matrix elements
-
-    steps:
-
-      - name: "Get Spack"
-        uses: spack/setup-spack@v2.1.1
-        with:
-          buildcache: false
-
-      - name: "Spack build"
-        shell: spack-bash {0}
-        env:
-          OCI_USERNAME: ${{ github.repository_owner }}
-          OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OSLABEL: ${{ matrix.os }}
-        run: |
-          spack env create test
-          spack env activate test
-          spack mirror add --unsigned spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
-          spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
-          spack add git cmake gmake jasper zlib-ng libpng hdf5 netcdf-c netcdf-fortran parallelio esmf fms precision=32,64 bacio@2.4.1 crtm g2 g2tmpl ip@4.3.0 sp w3emc gftl-shared mapl scotch
-          spack concretize
-          spack install --no-check-signature
-          spack buildcache push --update-index --unsigned spack-build-cache
-          echo -e "  container:\n    images:\n      os: '${OSLABEL/-/:}'\n      spack: develop\n    strip: false\n    os_packages:\n      final: [gcc,g++,gfortran,cmake,make]" >> $SPACK_ENV/spack.yaml
-          cd $SPACK_ENV
-          spack containerize > $GITHUB_WORKSPACE/Dockerfile
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+#  container-build:
+#    strategy:
+#      matrix:
+#        os: [ubuntu-24.04]
+#    runs-on: ${{ matrix.os }}
+#    permissions:
+#      contents: read
+#      packages: write
+#      attestations: write
+#      id-token: write
+#    env:
+#      REGISTRY: ghcr.io
+#      IMAGE_NAME: ${{ github.repository }}-${{ matrix.os }} # add whatever matrix elements
+#
+#    steps:
+#
+#      - name: "Get Spack"
+#        uses: spack/setup-spack@v2.1.1
+#        with:
+#          buildcache: false
+#
+#      - name: "Spack build"
+#        shell: spack-bash {0}
+#        env:
+#          OCI_USERNAME: ${{ github.repository_owner }}
+#          OCI_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          OSLABEL: ${{ matrix.os }}
+#        run: |
+#          spack env create test
+#          spack env activate test
+#          spack mirror add --unsigned spack-build-cache oci://ghcr.io/$OCI_USERNAME/ci-playground
+#          spack mirror set --push --oci-username-variable OCI_USERNAME --oci-password-variable OCI_TOKEN spack-build-cache
+#          spack add git cmake gmake jasper zlib-ng libpng hdf5 netcdf-c netcdf-fortran parallelio esmf fms precision=32,64 bacio@2.4.1 crtm g2 g2tmpl ip@4.3.0 sp w3emc gftl-shared mapl scotch
+#          spack concretize
+#          spack install --no-check-signature
+#          spack buildcache push --update-index --unsigned spack-build-cache
+#          echo -e "  container:\n    images:\n      os: '${OSLABEL/-/:}'\n      spack: develop\n    strip: false\n    os_packages:\n      final: [gcc,g++,gfortran,cmake,make]" >> $SPACK_ENV/spack.yaml
+#          cd $SPACK_ENV
+#          spack containerize > $GITHUB_WORKSPACE/Dockerfile
+#
+#      - name: Log in to the Container registry
+#        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+#        with:
+#          registry: ${{ env.REGISTRY }}
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Extract metadata (tags, labels) for Docker
+#        id: meta
+#        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+#        with:
+#          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+#
+#      - name: Build and push Docker image
+#        id: push
+#        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+#        with:
+#          context: .
+#          push: true
+#          tags: ${{ steps.meta.outputs.tags }}
+#          labels: ${{ steps.meta.outputs.labels }}
+#
+#      - name: Generate artifact attestation
+#        uses: actions/attest-build-provenance@v2
+#        with:
+#          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+#          subject-digest: ${{ steps.push.outputs.digest }}
+#          push-to-registry: true
 
   container-run-test:
     needs: container-build
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     container:
-      image: ghcr.io/alexanderrichert-noaa/ci-playground-ubuntu-24.04:master
+      image: jcsda/docker-gnu-openmpi-dev:1.9
+#      image: ghcr.io/alexanderrichert-noaa/ci-playground-ubuntu-24.04:master
     steps:
 
       - name: test
