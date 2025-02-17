@@ -78,13 +78,13 @@ jobs:
 #    needs: container-build
     runs-on: ubuntu-22.04
     container:
-      image: jcsda/docker-gnu-openmpi-dev:1.9
+      image: docker pull noaaepic/ubuntu22.04-intel-unified:v1.9.0
 #      image: ghcr.io/alexanderrichert-noaa/ci-playground-ubuntu-24.04:master
     steps:
 
       - name: test
         run: |
           . /opt/spack-environment/activate.sh
-          git clone --recurse-submodules https://github.com/ufs-community/ufs-weather-model
-          cmake -S ufs-weather-model -B build -DAPP=ATM
+          git clone https://github.com/NOAA-EMC/GSI
+          cmake -S GSI -B build -DGSI_MODE=Regional -DENKF_MODE=GFS -DBUILD_REG_TESTING=OFF ..
           cmake --build build --parallel 2 --verbose
