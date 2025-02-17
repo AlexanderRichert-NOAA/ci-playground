@@ -75,7 +75,7 @@ jobs:
 #          push-to-registry: true
 
   container-run-test:
-    needs: container-build
+#    needs: container-build
     runs-on: ubuntu-22.04
     container:
       image: jcsda/docker-gnu-openmpi-dev:1.9
