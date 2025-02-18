@@ -78,7 +78,7 @@ jobs:
 #    needs: container-build
     runs-on: ubuntu-22.04
     container:
-      image: docker pull noaaepic/ubuntu22.04-intel-unified:v1.9.0
+      image: noaaepic/ubuntu22.04-intel-unified:v1.9.0
 #      image: ghcr.io/alexanderrichert-noaa/ci-playground-ubuntu-24.04:master
     steps:
 
