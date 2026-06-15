@@ -1,7 +1,8 @@
 ### Description
 
 
-### Issues addressed ("Fixes #XXX" to auto-close issue)
+### Issues addressed
+_"Fixes #XXX" to auto-close issue on merge_
 
 
 ### Generative AI disclosure (required)
